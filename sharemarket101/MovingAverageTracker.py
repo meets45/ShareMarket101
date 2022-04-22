@@ -11,7 +11,7 @@ class MovingAverageTracker:
         that is short window(5, 10 ,20) and long window(50, 200), and checks if current share
         price is above short DMA and long DMA and short DMA is above long DMA.
 
-        share_list - (list)list of shares. Eg: [ITC.NS, TCS.NS, CANBK.NS]
+        share_list - (list)list of shares. Eg: ['ITC.NS', 'TCS.NS', 'CANBK.NS']
 
         short_window - (int)look-back period for short-term moving average. Eg: 5, 20
 
@@ -50,7 +50,7 @@ class MovingAverageTracker:
     long window(50, 200), and checks if current share price is above short DMA and long DMA and short DMA is
     above long DMA.
 
-        share_name - (str)Name of share. Eg: ITC.NS
+        share_name - (str)Name of share. Eg: 'ITC.NS'
 
         short_window - (int)look-back period for short-term moving average. Eg: 5, 20
 

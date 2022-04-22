@@ -12,7 +12,7 @@ class FinancialAnalysis:
         P/B Ratio, OPM, Div. Yield, EPS, ROE, PEG Ratio. It also provides basic information about major shareholding
          pattern and list of institutional shareholders if available.
 
-        symbol - (str)Name of stock ticker you want to analyze. Eg: RELIANCE
+        symbol - (str)Name of stock ticker you want to analyze. Eg: 'RELIANCE.NS'
         """
         try:
             data = yfinance.Ticker(self.symbol+".NS")
