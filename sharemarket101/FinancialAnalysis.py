@@ -15,9 +15,11 @@ class FinancialAnalysis:
         symbol - (str)Name of stock ticker you want to analyze. Eg: 'RELIANCE.NS'
         """
         try:
-            data = yfinance.Ticker(self.symbol+".NS")
-
-            print(f"Book Value: {data.info['bookValue']:.2f}")
+            data = yfinance.Ticker(self.symbol)
+            if data.info['bookValue'] is None:
+                print(f"Book Value: {data.info['bookValue']}")
+            else:
+                print(f"Book Value: {data.info['bookValue']:.2f}")
             print(f"Current Price: {data.info['currentPrice']:.2f}")
 
             if data.info['debtToEquity'] is None:
@@ -40,6 +42,11 @@ class FinancialAnalysis:
             else:
                 print(f"Earnings Quarterly Growth: {(data.info['earningsQuarterlyGrowth']) * 100:.2f}%")
 
+            if data.info['forwardEps'] is None:
+                print(f"Earnings Per Share: {data.info['forwardEps']}")
+            else:
+                print(f"Earnings Per Share: {data.info['forwardEps']:.2f}")
+
             if data.info['ebitdaMargins'] is None:
                 print(f"EBITDA Margins: {(data.info['ebitdaMargins'])}")
             else:
@@ -55,10 +62,20 @@ class FinancialAnalysis:
             else:
                 print(f"Operating Margins: {(data.info['operatingMargins']) * 100:.2f}%")
 
+            if data.info['pegRatio'] is None:
+                print(f"PEG Ratio: {data.info['pegRatio']}")
+            else:
+                print(f"PEG Ratio: {data.info['pegRatio']:.2f}x")
+
             if data.info['priceToBook'] is None:
                 print(f"Price to Book: {data.info['priceToBook']}")
             else:
                 print(f"Price to Book: {data.info['priceToBook']:.2f}x")
+
+            if data.info['forwardPE'] is None:
+                print(f"Price to Earnings Ratio: {data.info['forwardPE']}")
+            else:
+                print(f"Price to Earnings Ratio: {data.info['forwardPE']:.2f}x")
 
             if data.info['profitMargins'] is None:
                 print(f"Profit Margins: {(data.info['profitMargins'])}")
@@ -74,21 +91,6 @@ class FinancialAnalysis:
                 print(f"Trailing EPS: {data.info['trailingEps']}")
             else:
                 print(f"Trailing EPS: {data.info['trailingEps']:.2f}")
-
-            if data.info['pegRatio'] is None:
-                print(f"PEG Ratio: {data.info['pegRatio']}")
-            else:
-                print(f"PEG Ratio: {data.info['pegRatio']:.2f}x")
-
-            if data.info['forwardEps'] is None:
-                print(f"Earnings Per Share: {data.info['forwardEps']}")
-            else:
-                print(f"Earnings Per Share: {data.info['forwardEps']:.2f}")
-
-            if data.info['forwardPE'] is None:
-                print(f"Price to Earning Ratio: {data.info['forwardPE']}")
-            else:
-                print(f"Price to Earning Ratio: {data.info['forwardPE']:.2f}x")
 
             if data.major_holders is None:
                 pass
