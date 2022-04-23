@@ -36,37 +36,28 @@ class MovingAverageStrategy:
         try:
             warnings.filterwarnings('ignore')
             stock_df = pdr.get_data_yahoo(stock_symbol, start_date, end_date)['Close']
-            stock_df = pd.DataFrame(stock_df)  # convert Series object to dataframe
-            stock_df.columns = {'Close Price'}  # assign new column name
-            stock_df.dropna(axis=0, inplace=True)  # remove any null rows
+            stock_df = pd.DataFrame(stock_df)
+            stock_df.columns = {'Close Price'}
+            stock_df.dropna(axis=0, inplace=True)
 
-            # column names for long and short moving average columns
             short_window_col = str(short_window) + '_' + moving_avg
             long_window_col = str(long_window) + '_' + moving_avg
 
             if moving_avg == 'SMA':
-                # Create a short simple moving average column
                 stock_df[short_window_col] = stock_df['Close Price'].rolling(window=short_window, min_periods=1).mean()
 
-                # Create a long simple moving average column
                 stock_df[long_window_col] = stock_df['Close Price'].rolling(window=long_window, min_periods=1).mean()
 
             elif moving_avg == 'EMA':
-                # Create short exponential moving average column
                 stock_df[short_window_col] = stock_df['Close Price'].ewm(span=short_window, adjust=False).mean()
 
-                # Create a long exponential moving average column
                 stock_df[long_window_col] = stock_df['Close Price'].ewm(span=long_window, adjust=False).mean()
 
-            # create a new column 'Signal' such that if faster moving average is greater than slower moving average
-            # then set Signal as 1 else 0.
             stock_df['Signal'] = 0.0
             stock_df['Signal'] = np.where(stock_df[short_window_col] > stock_df[long_window_col], 1.0, 0.0)
 
-            # create a new column 'Position' which is a day-to-day difference of the 'Signal' column.
             stock_df['Position'] = stock_df['Signal'].diff()
 
-            # plot close price, short-term and long-term moving averages
             if stock_df['Signal'].iloc[-1] == 1.0 and \
                     stock_df['Close Price'].iloc[-1] > stock_df[short_window_col].iloc[-1]:
                 plt.figure(figsize=(14, 7))
@@ -75,12 +66,10 @@ class MovingAverageStrategy:
                 stock_df[short_window_col].plot(color='blue', lw=1, label=short_window_col)
                 stock_df[long_window_col].plot(color='g', lw=1, label=long_window_col)
 
-                # plot 'buy' signals
                 plt.plot(stock_df[stock_df['Position'] == 1].index,
                          stock_df[short_window_col][stock_df['Position'] == 1],
                          '^', markersize=15, color='g', alpha=0.7, label='buy')
 
-                # plot 'sell' signals
                 plt.plot(stock_df[stock_df['Position'] == -1].index,
                          stock_df[short_window_col][stock_df['Position'] == -1],
                          'v', markersize=15, color='r', alpha=0.7, label='sell')
